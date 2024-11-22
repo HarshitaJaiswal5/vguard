@@ -6,7 +6,11 @@ const cors = require('cors');  // <-- Import cors here
 require('dotenv').config();  // Load environment variables
 
 const app = express();
-app.use(cors());
+app.use(cors({
+origin: [""],
+  methods: ["POST","GET"],
+  credentials: true
+}));
 
 // Middleware
 app.use(bodyParser.json());  // To parse incoming JSON data
