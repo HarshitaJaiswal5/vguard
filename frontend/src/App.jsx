@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import HeroSec from './components/HeroSec';
 import AboutSec from './components/AboutSec';
-import Footer from './components/footer';
+import Footer from './components/Footer';
 import Contact from './components/Contact';
 import ReadModeModal from './components/ReadModeModal';
 
