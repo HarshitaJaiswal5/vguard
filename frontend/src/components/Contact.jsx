@@ -9,6 +9,7 @@ const Contact = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,15 +22,29 @@ const Contact = () => {
     setSubmitError("");
 
     try {
-      // Add API submission logic here
-      console.log("Form data submitted:", formData);
-      setIsSubmitting(false);
-      setFormData({ name: "", email: "", message: "" });
+      const response = await fetch("http://localhost:3000/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSubmitSuccess("Your message has been successfully sent!");
+        setFormData({ name: "", email: "", message: "" }); // Reset form
+      } else {
+        setSubmitError(result.message || "Failed to submit the form. Please try again.");
+      }
     } catch (error) {
-      setSubmitError("Failed to submit the form. Please try again.");
-      setIsSubmitting(false);
+      setSubmitError("Error: " + error.message);
     }
+
+    setIsSubmitting(false);
   };
+  
   return (
     <section className="bg-white" id="contact">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
@@ -214,6 +229,7 @@ const Contact = () => {
                     </div>
                   </div>
                   {submitError && <p className="text-red-600">{submitError}</p>}
+                  {submitSuccess && <p className="text-green-600">{submitSuccess}</p>}
                   <button
                     type="submit"
                     className={`inline-block rounded-lg border border-transparent px-8 py-3 text-base font-semibold text-white shadow-sm ring-1 ring-gray-900/10 transition-all hover:ring-gray-900/20 ${
